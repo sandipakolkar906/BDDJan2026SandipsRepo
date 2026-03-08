@@ -1,7 +1,9 @@
 package com.qa.pages;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -59,6 +61,38 @@ public class ClaimsPage {
 	@FindBy(xpath = "//button[text()=' Yes, Delete ']")
 	WebElement deleteConfirmButton;
 
+	// Page object repo for claims
+
+	@FindBy(xpath = "//a[text()='Submit Claim']")
+	WebElement submitclaimsPageLink;
+
+	@FindBy(xpath = "//label[text()='Event']/following::i[1]")
+	WebElement eventDropdownButton;
+
+	@FindBy(xpath = "//label[text()='Currency']/following::i[1]")
+	WebElement currencyDropdownButton;
+
+	@FindBy(xpath = "//button[text()=' Create ']")
+	WebElement createButton;
+
+	@FindBy(xpath = "//h6[text()='Expenses']/following::button[1]")
+	WebElement addExpenseButton;
+
+	@FindBy(xpath = "//label[text()='Expense Type']/following::i[1]")
+	WebElement expenseTypeDropdownButton;
+
+	@FindBy(xpath = "//label[text()='Date']/following::input[1]")
+	WebElement expendeDatefield;
+
+	@FindBy(xpath = "//label[text()='Amount']/following::input[1]")
+	WebElement expendeamountfield;
+
+	@FindBy(xpath = "//button[text()=' Save ']")
+	WebElement saveExpenseButton;
+
+	@FindBy(xpath = "//p[@class='oxd-text oxd-text--p']")
+	WebElement totalamounttext;
+
 	// page class constructer
 
 	public ClaimsPage(WebDriver driver, Scenario scenario) {
@@ -69,7 +103,66 @@ public class ClaimsPage {
 
 	}
 
-	// Page operation methods
+	
+	// claims page operations
+	
+	
+	public void navigateToSubmitClaimsPage(){
+		
+		ElementActions.clickElement(driver, submitclaimsPageLink, scenario);
+		WaitMethods.staticWait(2000, scenario);
+		
+	}
+	
+	
+	public void createClaim(){
+		
+		
+		Actions objactions= new Actions(driver);
+		
+		ElementActions.clickElement(driver, eventDropdownButton, scenario);
+		objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		objactions.sendKeys(Keys.ENTER).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		ElementActions.clickElement(driver, currencyDropdownButton, scenario);
+		objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		objactions.sendKeys(Keys.ENTER).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		ElementActions.clickElement(driver, createButton, scenario);
+		WaitMethods.staticWait(5000, scenario);
+		
+		
+	}
+	
+	
+	public void addExpense(String date, String amount){
+		
+		ElementActions.clickElement(driver, addExpenseButton, scenario);
+		WaitMethods.staticWait(2000, scenario);
+		Actions objactions= new Actions(driver);
+		ElementActions.clickElement(driver, expenseTypeDropdownButton, scenario);
+		WaitMethods.staticWait(2000, scenario);
+		objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		objactions.sendKeys(Keys.ENTER).build().perform();
+		WaitMethods.staticWait(2000, scenario);
+		ElementActions.sendKeys(driver, expendeDatefield, scenario, date);
+		WaitMethods.staticWait(2000, scenario);
+		ElementActions.sendKeys(driver,expendeamountfield , scenario, amount);
+		ElementActions.clickElement(driver, saveExpenseButton, scenario);
+		WaitMethods.staticWait(5000, scenario);
+	}
+	
+	
+	public double  getTotalAmount(){
+		
+		return Double.parseDouble(ElementActions.getText(driver, totalamounttext, scenario).split(":")[1].trim());
+		
+	}
+	
+	// Event Page operation methods
 
 	public void navigateToClaimsPage() {
 
