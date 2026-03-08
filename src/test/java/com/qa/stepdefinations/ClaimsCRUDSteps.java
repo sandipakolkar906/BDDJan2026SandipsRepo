@@ -99,6 +99,45 @@ public class ClaimsCRUDSteps extends Base {
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
 	}
 
+	// Claims CRUD
+
+	@Given("^I navigate to submit claims Page$")
+	public void i_navigate_to_submit_claims_Page() throws Throwable {
+		scenario.write("NAvigate to submit claims page ");
+		objClaimsPage.navigateToSubmitClaimsPage();
+		WaitMethods.staticWait(5000, scenario);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+		
+	}
+
+	@When("^I crate claim Request with Event and Currency$")
+	public void i_crate_claim_Request_with_Event_and_Currency(DataTable eventCurrencyTable) throws Throwable {
+		scenario.write("creating a claim record");
+		objClaimsPage.createClaim();
+		WaitMethods.staticWait(5000, scenario);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+	}
+
+	@When("^I add Expenses for the new claim Request with below fields and values$")
+	public void i_add_Expenses_for_the_new_claim_Request_with_below_fields_and_values(DataTable dateandAmountTable) throws Throwable {
+		scenario.write("Adding the expense for the claim");
+		objClaimsPage.addExpense(dateandAmountTable.raw().get(2).get(1), dateandAmountTable.raw().get(3).get(1));
+		WaitMethods.staticWait(5000, scenario);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+	}
+
+	@Then("^I verify the total amount of all expenses is caculated correctly$")
+	public void i_verify_the_total_amount_of_all_expenses_is_caculated_correctly() throws Throwable {
+		scenario.write("Verifying total amount ");
+		System.out.println("Expected"+ 100.00);
+		System.out.println("actual"+ objClaimsPage.getTotalAmount());
+		Assert.assertEquals(100.00, objClaimsPage.getTotalAmount(), 0.01);
+		WaitMethods.staticWait(5000, scenario);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+		
+		
+	}
+
 	@After
 	public void closeApplication() {
 		scenario.write("closing the application");
